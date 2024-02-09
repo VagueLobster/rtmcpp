@@ -1,36 +1,32 @@
-workspace "rtmcpp"
-	configurations { "Debug", "Release" }
-	language "C++"
-	cppdialect "C++latest"
-
 project "rtmcpp"
 	kind "None"
 	location "Include/"
 
-	files {
+	files
+	{
 		"rtmcpp/**.hpp"
 	}
 
-	externalincludedirs {
+	externalincludedirs
+	{
 		"./rtm/includes/"
 	}
+	
+	defines { "RTMCPP_EXPORT=" }
 
-project "Tests"
-	kind "ConsoleApp"
-	location "Tests/"
+	filter "system:windows"
+		systemversion "latest"
+		cppdialect "C++latest"
 
-	files {
-		"./Tests/**.cpp"
-	}
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
 
-	externalincludedirs {
-		"./Include/",
-		"./rtm/includes/"
-	}
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
 
-    defines {
-        "RTMCPP_EXPORT="
-    }
-
-	filter { "configurations:Release" }
-		vectorextensions "AVX2"
+    filter "configurations:Dist"
+		runtime "Release"
+		optimize "on"
+        symbols "off"
